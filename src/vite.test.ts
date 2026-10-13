@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import type { Plugin, UserConfig } from 'vite';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { call, createServer, setup } from './utils/test/plugin';
 import { createProject, type Project } from './utils/test/project';
@@ -217,6 +218,43 @@ describe('customElements plugin', () => {
 		call(plugin.buildStart);
 
 		expect(project.read('src/elementId.gen.ts')).toContain("'booking'");
+	});
+
+	describe('config', () => {
+		const configure = (plugin: Plugin, userConfig: UserConfig) =>
+			call(plugin.config, userConfig) as UserConfig | undefined;
+
+		it('sets one build input per element', () => {
+			project.touch('src/app/home/index.ts');
+			project.touch('src/app/booking/record/index.ts');
+
+			const result = configure(customElements(), { root: project.root });
+
+			expect(result?.build?.rollupOptions?.input).toEqual({
+				'booking-record': path.join(
+					project.root,
+					'src/app/booking/record/index.ts'
+				),
+				home: path.join(project.root, 'src/app/home/index.ts')
+			});
+		});
+
+		it('keeps an input the user already set', () => {
+			project.touch('src/app/home/index.ts');
+
+			const result = configure(customElements(), {
+				root: project.root,
+				build: { rollupOptions: { input: 'custom.html' } }
+			});
+
+			expect(result).toBeUndefined();
+		});
+
+		it('sets nothing when there are no elements', () => {
+			expect(
+				configure(customElements(), { root: project.root })
+			).toBeUndefined();
+		});
 	});
 
 	describe('dev server', () => {

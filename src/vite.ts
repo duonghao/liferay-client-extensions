@@ -137,6 +137,21 @@ export function customElements(
 
 	return {
 		name: 'custom-elements',
+		config(userConfig) {
+			if (userConfig.build?.rollupOptions?.input) return;
+
+			const root = path.resolve(userConfig.root ?? process.cwd());
+			const input = Object.fromEntries(
+				Object.entries(scanElements(root, options)).map(([id, entry]) => [
+					id,
+					path.resolve(root, entry)
+				])
+			);
+
+			if (!Object.keys(input).length) return;
+
+			return { build: { rollupOptions: { input } } };
+		},
 		configResolved(config) {
 			root = config.root;
 			server = config.server ?? {};
