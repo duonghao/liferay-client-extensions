@@ -270,7 +270,8 @@ const buildElement = (
 	} as ElementConfig;
 };
 
-const dump = (value: unknown) => stringify(value, { lineWidth: 0 });
+const dump = (value: unknown) =>
+	stringify(value, { lineWidth: 0, aliasDuplicateObjects: false });
 
 /** Production file: `assemble` block plus every element with built asset globs. */
 export const renderProduction = (

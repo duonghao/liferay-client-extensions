@@ -77,6 +77,24 @@ describe('client extension files', () => {
 		});
 	});
 
+	it('writes shared properties in full without yaml aliases', () => {
+		const plugin = run({
+			clientExtension: {
+				properties: { api: 'prod' },
+				environments: { dev: { properties: { api: 'dev' } } },
+			},
+		});
+
+		call(plugin.generateBundle, {}, {});
+
+		for (const file of ['client-extension.yaml', 'client-extension.dev.yaml']) {
+			const content = project.read(file);
+
+			expect(content).not.toMatch(/[&*]a\d+/);
+			expect(content.match(/api: (prod|dev)/g)).toHaveLength(2);
+		}
+	});
+
 	it('writes production from the bundle', () => {
 		const plugin = run({
 			clientExtension: { sourceCodeURL: 'https://git/repo/tree/main' },
