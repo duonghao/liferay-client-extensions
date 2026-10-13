@@ -1,5 +1,5 @@
 {
-	"name": "liferay-custom-element",
+	"name": "liferay-client-extensions",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",

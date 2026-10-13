@@ -1,4 +1,4 @@
-# Liferay Custom Elements
+# Liferay Client Extensions
 
 Build Liferay widgets with folders, not config.
 
@@ -14,7 +14,7 @@ src/app/
 ## Install
 
 ```sh
-pnpm add liferay-custom-element
+pnpm add liferay-client-extensions
 ```
 
 ## Quick start
@@ -24,7 +24,7 @@ Add the plugin to Vite:
 ```ts
 // vite.config.ts
 import { defineConfig } from 'vite';
-import { customElements } from 'liferay-custom-element/vite';
+import { customElements } from 'liferay-client-extensions/vite';
 
 export default defineConfig({
 	plugins: [customElements()]
@@ -35,7 +35,7 @@ Create an element:
 
 ```tsx
 // src/app/booking/record/index.tsx
-import { createElement } from 'liferay-custom-element';
+import { createElement } from 'liferay-client-extensions';
 
 const Record = () => <h1>Booking {booking.useSearch().id}</h1>;
 
