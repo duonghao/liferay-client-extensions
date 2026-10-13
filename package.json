@@ -1,13 +1,36 @@
 {
 	"name": "liferay-client-extensions",
-	"version": "0.0.0",
-	"private": true,
+	"version": "0.1.0",
+	"description": "Build Liferay widgets with folders, not config. Generates client-extension.yaml from your file structure.",
+	"keywords": [
+		"client-extension",
+		"custom-element",
+		"liferay",
+		"react",
+		"vite"
+	],
+	"homepage": "https://github.com/duonghao/liferay-client-extensions#readme",
+	"bugs": {
+		"url": "https://github.com/duonghao/liferay-client-extensions/issues"
+	},
+	"license": "MIT",
+	"author": "Hao Duong <hao.duong11@gmail.com>",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/duonghao/liferay-client-extensions.git"
+	},
+	"files": [
+		"dist"
+	],
 	"type": "module",
 	"types": "./dist/index.d.mts",
 	"exports": {
 		".": "./dist/index.mjs",
 		"./vite": "./dist/vite.mjs",
 		"./package.json": "./package.json"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsc -b && tsdown",
@@ -16,7 +39,8 @@
 		"fmt": "oxfmt",
 		"fmt:check": "oxfmt --check",
 		"lint": "oxlint",
-		"prepare": "husky"
+		"prepare": "husky",
+		"prepublishOnly": "pnpm lint && pnpm test && pnpm build"
 	},
 	"dependencies": {
 		"yaml": "^2.9.1"
@@ -53,5 +77,8 @@
 			"oxlint --fix"
 		],
 		"*.{json,yaml,yml,md}": "oxfmt --no-error-on-unmatched-pattern"
+	},
+	"engines": {
+		"node": ">=20"
 	}
 }
