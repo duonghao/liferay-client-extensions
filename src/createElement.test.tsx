@@ -56,7 +56,7 @@ describe('createElement', () => {
 		setSearch('?page=2&q=abc');
 
 		const definition = createElement(id, {
-			component: () => <span>{JSON.stringify(definition.useSearch())}</span>,
+			component: () => <span>{JSON.stringify(definition.useSearch())}</span>
 		});
 
 		const element = mount(id);
@@ -73,7 +73,7 @@ describe('createElement', () => {
 
 		const definition = createElement(id, {
 			component: () => <span>{definition.useSearch().page + 1}</span>,
-			validateSearch: raw => ({ page: Number(raw['page']) }),
+			validateSearch: raw => ({ page: Number(raw['page']) })
 		});
 
 		const element = mount(id);
@@ -90,7 +90,7 @@ describe('createElement', () => {
 				seen(definition.useElement());
 
 				return null;
-			},
+			}
 		});
 
 		const element = mount(id);
@@ -113,7 +113,7 @@ describe('createElement', () => {
 				new Promise<void>(resolve => {
 					order.push('beforeLoad');
 					release = resolve;
-				}),
+				})
 		});
 
 		const element = mount(id);
@@ -138,7 +138,7 @@ describe('createElement', () => {
 		createElement(id, {
 			component: () => null,
 			validateSearch: raw => ({ id: Number(raw['id']) }),
-			beforeLoad,
+			beforeLoad
 		});
 
 		const element = mount(id);
@@ -160,7 +160,7 @@ describe('createElement', () => {
 				new Promise<void>(resolve => {
 					started();
 					release = resolve;
-				}),
+				})
 		});
 
 		const element = mount(id);
@@ -184,7 +184,7 @@ describe('createElement', () => {
 			beforeLoad: () =>
 				new Promise<void>(resolve => {
 					releases.push(resolve);
-				}),
+				})
 		});
 
 		const element = mount(id);
@@ -249,7 +249,7 @@ describe('createElement', () => {
 		const id = uniqueId();
 
 		const definition = createElement(id, {
-			component: () => <span>{definition.useElement().id}</span>,
+			component: () => <span>{definition.useElement().id}</span>
 		});
 
 		const first = mount(id);

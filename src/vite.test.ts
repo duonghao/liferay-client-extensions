@@ -22,7 +22,7 @@ describe('scanElements', () => {
 
 		expect(scanElements(project.root)).toEqual({
 			'booking-booking-record': 'src/app/booking/booking-record/index.ts',
-			home: 'src/app/home/index.ts',
+			home: 'src/app/home/index.ts'
 		});
 	});
 
@@ -34,7 +34,7 @@ describe('scanElements', () => {
 		expect(Object.keys(scanElements(project.root))).toEqual([
 			'alpha',
 			'mid',
-			'zeta',
+			'zeta'
 		]);
 	});
 
@@ -48,7 +48,7 @@ describe('scanElements', () => {
 			'a',
 			'b',
 			'c',
-			'd',
+			'd'
 		]);
 	});
 
@@ -178,7 +178,7 @@ describe('customElements plugin', () => {
 
 		const plugin = customElements({
 			appDir: 'src/elements',
-			typeName: 'WidgetId',
+			typeName: 'WidgetId'
 		});
 
 		setup(plugin, project.root);

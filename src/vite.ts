@@ -7,7 +7,7 @@ import {
 	writeClientExtensionEnvironments,
 	writeClientExtensionProduction,
 	writeIfChanged,
-	type ClientExtensionOptions,
+	type ClientExtensionOptions
 } from './clientExtension';
 
 export type * from './clientExtension';
@@ -33,7 +33,7 @@ const resolveOptions = (options: CustomElementsPluginOptions) => ({
 	entryName: options.entryName ?? 'index',
 	extensions: options.extensions ?? ['ts', 'tsx', 'js', 'jsx'],
 	ignore: options.ignore ?? DEFAULT_IGNORE,
-	separator: options.separator ?? '-',
+	separator: options.separator ?? '-'
 });
 
 type ResolvedOptions = ReturnType<typeof resolveOptions>;
@@ -172,6 +172,6 @@ export function customElements(
 
 			devServer.watcher.on('add', onChange);
 			devServer.watcher.on('unlink', onChange);
-		},
+		}
 	};
 }

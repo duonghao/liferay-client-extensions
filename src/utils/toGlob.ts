@@ -6,4 +6,3 @@ export const toGlob = (fileName: string) => {
 
 	return match ? `${match[1]}${match[2]}*${match[3]}` : fileName;
 };
-

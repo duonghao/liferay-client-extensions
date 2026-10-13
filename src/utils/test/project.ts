@@ -17,7 +17,7 @@ export const createProject = () => {
 		},
 		read: (relativePath: string) =>
 			fs.readFileSync(path.join(root, relativePath), 'utf8'),
-		remove: () => fs.rmSync(root, { recursive: true, force: true }),
+		remove: () => fs.rmSync(root, { recursive: true, force: true })
 	};
 };
 

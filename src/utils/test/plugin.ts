@@ -12,6 +12,6 @@ export const createServer = () => {
 
 	return {
 		watcher,
-		server: { watcher } as unknown as ViteDevServer,
+		server: { watcher } as unknown as ViteDevServer
 	};
 };

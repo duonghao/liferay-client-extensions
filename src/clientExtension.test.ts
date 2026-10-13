@@ -32,15 +32,15 @@ describe('client extension files', () => {
 			'booking-record': {
 				urls: [
 					'http://localhost:5173/@vite/client',
-					'http://localhost:5173/src/app/booking/record/index.ts',
-				],
+					'http://localhost:5173/src/app/booking/record/index.ts'
+				]
 			},
 			home: {
 				urls: [
 					'http://localhost:5173/@vite/client',
-					'http://localhost:5173/src/app/home/index.ts',
-				],
-			},
+					'http://localhost:5173/src/app/home/index.ts'
+				]
+			}
 		});
 	});
 
@@ -49,7 +49,7 @@ describe('client extension files', () => {
 
 		call(plugin.configResolved, {
 			root: project.root,
-			server: { port: 3001 },
+			server: { port: 3001 }
 		});
 		call(plugin.buildStart);
 
@@ -63,17 +63,17 @@ describe('client extension files', () => {
 			clientExtension: {
 				environments: {
 					dev: { properties: { api: 'dev' } },
-					uat: { elements: { home: { name: 'Home UAT' } } },
-				},
-			},
+					uat: { elements: { home: { name: 'Home UAT' } } }
+				}
+			}
 		});
 
 		expect(parse(project.read('client-extension.dev.yaml'))).toEqual({
 			'booking-record': { properties: { api: 'dev' } },
-			home: { properties: { api: 'dev' } },
+			home: { properties: { api: 'dev' } }
 		});
 		expect(parse(project.read('client-extension.uat.yaml'))).toEqual({
-			home: { name: 'Home UAT' },
+			home: { name: 'Home UAT' }
 		});
 	});
 
@@ -81,8 +81,8 @@ describe('client extension files', () => {
 		const plugin = run({
 			clientExtension: {
 				properties: { api: 'prod' },
-				environments: { dev: { properties: { api: 'dev' } } },
-			},
+				environments: { dev: { properties: { api: 'dev' } } }
+			}
 		});
 
 		call(plugin.generateBundle, {}, {});
@@ -97,7 +97,7 @@ describe('client extension files', () => {
 
 	it('writes production from the bundle', () => {
 		const plugin = run({
-			clientExtension: { sourceCodeURL: 'https://git/repo/tree/main' },
+			clientExtension: { sourceCodeURL: 'https://git/repo/tree/main' }
 		});
 		const entry = `${project.root}/src/app/home/index.ts`;
 		const bundle = {
@@ -107,7 +107,7 @@ describe('client extension files', () => {
 				isEntry: true,
 				facadeModuleId: entry,
 				imports: ['shared.ZzZ98765.js'],
-				viteMetadata: { importedCss: new Set(['home.AbC12345.css']) },
+				viteMetadata: { importedCss: new Set(['home.AbC12345.css']) }
 			},
 			'shared.ZzZ98765.js': {
 				type: 'chunk',
@@ -115,8 +115,8 @@ describe('client extension files', () => {
 				isEntry: false,
 				facadeModuleId: null,
 				imports: [],
-				viteMetadata: { importedCss: new Set(['shared.ZzZ98765.css']) },
-			},
+				viteMetadata: { importedCss: new Set(['shared.ZzZ98765.css']) }
+			}
 		};
 
 		call(plugin.generateBundle, {}, bundle);
@@ -131,12 +131,12 @@ describe('client extension files', () => {
 			useESM: true,
 			sourceCodeURL: 'https://git/repo/tree/main/src/app/home',
 			cssURLs: ['home.*.css', 'shared.*.css'],
-			urls: ['home.*.js'],
+			urls: ['home.*.js']
 		});
 		expect(yaml['booking-record']).toMatchObject({
 			name: 'Booking Record',
 			cssURLs: [],
-			urls: [],
+			urls: []
 		});
 	});
 });
@@ -144,25 +144,27 @@ describe('client extension files', () => {
 describe('assemble from', () => {
 	it('follows build.outDir relative to the output directory', () => {
 		const plugin = customElements({
-			clientExtension: { output: 'extension' },
+			clientExtension: { output: 'extension' }
 		});
 
 		call(plugin.configResolved, {
 			root: project.root,
-			build: { outDir: 'build/vite' },
+			build: { outDir: 'build/vite' }
 		});
 		call(plugin.generateBundle, {}, {});
 
-		expect(parse(project.read('extension/client-extension.yaml')).assemble[0]).toMatchObject({
-			from: '../build/vite',
+		expect(
+			parse(project.read('extension/client-extension.yaml')).assemble[0]
+		).toMatchObject({
+			from: '../build/vite'
 		});
 	});
 });
 
 describe('collectAssets', () => {
 	it('skips elements without a matching entry chunk', () => {
-		expect(collectAssets({}, project.root, { home: 'src/app/home/index.ts' })).toEqual(
-			{}
-		);
+		expect(
+			collectAssets({}, project.root, { home: 'src/app/home/index.ts' })
+		).toEqual({});
 	});
 });

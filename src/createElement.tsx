@@ -66,6 +66,6 @@ export function createElement<TId extends string, TSearch = RawSearch>(
 	return {
 		id,
 		useSearch: () => useElementState().search as TSearch,
-		useElement: () => useElementState().element,
+		useElement: () => useElementState().element
 	};
 }

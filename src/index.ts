@@ -3,7 +3,7 @@ export type {
 	BeforeLoadContext,
 	ElementDefinition,
 	ElementOptions,
-	RawSearch,
+	RawSearch
 } from './createElement';
 export { ElementStateContext, useElementState } from './elementState';
 export type { ElementState } from './elementState';

@@ -206,10 +206,10 @@ export const defaultAssemble = (from: string): AssembleEntry[] => [
 			'**/*.json',
 			'**/*.png',
 			'**/*.jpeg',
-			'**/*.svg',
+			'**/*.svg'
 		],
-		into: 'static/',
-	},
+		into: 'static/'
+	}
 ];
 
 export const resolveClientExtensionOptions = (
@@ -236,7 +236,7 @@ export const resolveClientExtensionOptions = (
 		assemble: options.assemble ?? defaultAssemble(from),
 		elements: options.elements ?? {},
 		environments: options.environments ?? {},
-		local: options.local ?? true,
+		local: options.local ?? true
 	};
 };
 
@@ -266,7 +266,7 @@ const buildElement = (
 		sourceCodeURL: base ? `${base}/${path.posix.dirname(entry)}` : '',
 		cssURLs: assets.cssURLs,
 		urls: assets.urls,
-		...options.elements[id],
+		...options.elements[id]
 	} as ElementConfig;
 };
 
@@ -289,9 +289,9 @@ export const renderProduction = (
 					entry,
 					assets[id] ?? { cssURLs: [], urls: [] },
 					options
-				),
+				)
 			])
-		),
+		)
 	});
 
 /** Named environment: only what differs from production. */
@@ -302,7 +302,7 @@ export const renderEnvironment = (
 	const entries = Object.keys(elements).flatMap(id => {
 		const overrides = {
 			...(environment.properties && { properties: environment.properties }),
-			...environment.elements?.[id],
+			...environment.elements?.[id]
 		};
 
 		return Object.keys(overrides).length ? [[id, overrides]] : [];
@@ -312,15 +312,12 @@ export const renderEnvironment = (
 };
 
 /** Local file: points every element at the Vite dev server. */
-export const renderLocal = (
-	elements: Record<string, string>,
-	origin: string
-) =>
+export const renderLocal = (elements: Record<string, string>, origin: string) =>
 	dump(
 		Object.fromEntries(
 			Object.entries(elements).map(([id, entry]) => [
 				id,
-				{ urls: [`${origin}/@vite/client`, `${origin}/${entry}`] },
+				{ urls: [`${origin}/@vite/client`, `${origin}/${entry}`] }
 			])
 		)
 	);
@@ -381,9 +378,9 @@ export const collectAssets = (
 							id,
 							{
 								cssURLs: [...collectCss(chunk)].map(toGlob),
-								urls: [toGlob(chunk.fileName)],
-							},
-						],
+								urls: [toGlob(chunk.fileName)]
+							}
+						]
 					]
 				: [];
 		})
