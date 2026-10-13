@@ -1,6 +1,16 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { Plugin } from 'vite';
+import {
+	collectAssets,
+	resolveClientExtensionOptions,
+	writeClientExtensionEnvironments,
+	writeClientExtensionProduction,
+	writeIfChanged,
+	type ClientExtensionOptions,
+} from './clientExtension';
+
+export type * from './clientExtension';
 
 export interface CustomElementsPluginOptions {
 	appDir?: string;
@@ -10,6 +20,8 @@ export interface CustomElementsPluginOptions {
 	extensions?: string[];
 	ignore?: string[];
 	separator?: string;
+	/** Client-extension yaml generation; every field falls back to a default. */
+	clientExtension?: ClientExtensionOptions;
 }
 
 const DEFAULT_IGNORE = ['shared', 'components', 'utils', 'hooks', 'widgets'];
@@ -83,15 +95,7 @@ const generate = (root: string, options: CustomElementsPluginOptions) => {
 		typeName
 	);
 
-	if (
-		fs.existsSync(outputPath) &&
-		fs.readFileSync(outputPath, 'utf8') === content
-	) {
-		return;
-	}
-
-	fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-	fs.writeFileSync(outputPath, content);
+	writeIfChanged(outputPath, content);
 };
 
 const isEntryFile = (
@@ -116,25 +120,58 @@ export function customElements(
 	options: CustomElementsPluginOptions = {}
 ): Plugin {
 	const resolved = resolveOptions(options);
+	let clientExtension = resolveClientExtensionOptions(
+		options.clientExtension ?? {}
+	);
 	let root = process.cwd();
+	let server: { port?: number; https?: unknown } = {};
+
+	const generateEnvironments = () => {
+		writeClientExtensionEnvironments(
+			root,
+			scanElements(root, options),
+			clientExtension,
+			server
+		);
+	};
 
 	return {
 		name: 'custom-elements',
 		configResolved(config) {
 			root = config.root;
+			server = config.server ?? {};
+			clientExtension = resolveClientExtensionOptions(
+				options.clientExtension ?? {},
+				{ root, outDir: config.build?.outDir ?? 'dist' }
+			);
 		},
 		buildStart() {
 			generate(root, options);
+			generateEnvironments();
 		},
-		configureServer(server) {
+		generateBundle(_, bundle) {
+			const elements = scanElements(root, options);
+
+			writeClientExtensionProduction(
+				root,
+				elements,
+				collectAssets(bundle, root, elements),
+				clientExtension
+			);
+		},
+		configureServer(devServer) {
 			generate(root, options);
+			generateEnvironments();
 
 			const onChange = (file: string) => {
-				if (isEntryFile(file, root, resolved)) generate(root, options);
+				if (!isEntryFile(file, root, resolved)) return;
+
+				generate(root, options);
+				generateEnvironments();
 			};
 
-			server.watcher.on('add', onChange);
-			server.watcher.on('unlink', onChange);
+			devServer.watcher.on('add', onChange);
+			devServer.watcher.on('unlink', onChange);
 		},
 	};
 }
